@@ -26,7 +26,6 @@
   </div>
 
   <div class="container my-4">
-    <!-- 功能分頁切換 -->
     <ul class="nav nav-tabs mb-3" id="mainTab" role="tablist">
       <li class="nav-item">
         <button class="nav-link active" id="calendar-tab" data-bs-toggle="tab" data-bs-target="#calendar-view" type="button">📅 月曆預約狀況</button>
@@ -53,16 +52,13 @@
                 <th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th>
               </tr>
             </thead>
-            <tbody id="calendarBody">
-              <!-- 月曆由 JS 動態生成 -->
-            </tbody>
+            <tbody id="calendarBody"></tbody>
           </table>
         </div>
       </div>
 
       <!-- 2. 管理者專區 -->
       <div class="tab-pane fade" id="admin-view">
-        <!-- 登入卡片 -->
         <div id="adminLoginForm" class="card mx-auto" style="max-width: 400px;">
           <div class="card-body">
             <h5 class="card-title text-center">管理者登入</h5>
@@ -78,7 +74,6 @@
           </div>
         </div>
 
-        <!-- 管理操作面板 (登入後顯示) -->
         <div id="adminPanel" class="d-none">
           <div class="d-flex justify-content-between mb-3">
             <h5>管理者功能</h5>
@@ -97,7 +92,10 @@
           <div class="tab-content">
             <!-- 預約管理 -->
             <div class="tab-pane fade show active" id="pills-res">
-              <button class="btn btn-success mb-3" onclick="openResModal()">+ 新增預約</button>
+              <div class="mb-3">
+                <button class="btn btn-success me-2" onclick="openResModal()">+ 單次新增預約</button>
+                <button class="btn btn-primary" onclick="openRecurringModal()">🔁 長期/週期性預約</button>
+              </div>
               <table class="table table-striped table-hover align-middle">
                 <thead>
                   <tr><th>日期</th><th>時段</th><th>場地</th><th>申請人</th><th>用途</th><th>操作</th></tr>
@@ -142,15 +140,18 @@
     </div>
   </div>
 
-  <!-- 預約編輯 Modal -->
+  <!-- 單次預約 Modal -->
   <div class="modal fade" id="resEditModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="resModalTitle">編輯預約</h5>
+          <h5 class="modal-title" id="resModalTitle">新增/修改預約</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
+          <div class="alert alert-warning py-2 mb-3" style="font-size: 0.85rem;">
+            <strong>⚠️ 系統限制：</strong>僅開放預約即日起<b>一年內</b>的場地。
+          </div>
           <form id="resForm">
             <input type="hidden" id="resId">
             <div class="mb-2">
@@ -197,6 +198,101 @@
     </div>
   </div>
 
+  <!-- 長期/週期預約 Modal -->
+  <div class="modal fade" id="recurringModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">🔁 長期/週期性預約設定</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger fw-bold mb-3">
+            ⚠️ 提示與防呆機制：系統僅開放預約即日起【一年內】的場地，超過一年的日期將無法成功送出！
+          </div>
+          <form id="recurringForm">
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <label class="fw-bold">申請人/帳號</label>
+                <input type="text" id="recUsername" class="form-control" required>
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="fw-bold">場地</label>
+                <select id="recVenue" class="form-select" required>
+                  <option value="智慧中心會議室（20）">智慧中心會議室（20）</option>
+                  <option value="準備教室B（40）">準備教室B（40）</option>
+                  <option value="電腦教室（25）">電腦教室（25）</option>
+                  <option value="視聽教室（90）">視聽教室（90）</option>
+                  <option value="廚房多功教室（40）">廚房多功教室（40）</option>
+                  <option value="前庭停車場（30）">前庭停車場（30）</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <label class="fw-bold">開始日期</label>
+                <input type="date" id="recStartDate" class="form-control" required>
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="fw-bold">結束日期</label>
+                <input type="date" id="recEndDate" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="fw-bold d-block">重複星期 (可多選)</label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input rec-day" type="checkbox" value="1" id="day1"><label class="form-check-label" for="day1">週一</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input rec-day" type="checkbox" value="2" id="day2"><label class="form-check-label" for="day2">週二</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input rec-day" type="checkbox" value="3" id="day3"><label class="form-check-label" for="day3">週三</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input rec-day" type="checkbox" value="4" id="day4"><label class="form-check-label" for="day4">週四</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input rec-day" type="checkbox" value="5" id="day5"><label class="form-check-label" for="day5">週五</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input rec-day" type="checkbox" value="6" id="day6"><label class="form-check-label" for="day6">週六</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input rec-day" type="checkbox" value="0" id="day0"><label class="form-check-label" for="day0">週日</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <label class="fw-bold">時段</label>
+                <select id="recSlot" class="form-select" required>
+                  <option value="全天">全天</option>
+                  <option value="上午">上午</option>
+                  <option value="下午">下午</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="fw-bold">聯絡電話</label>
+                <input type="text" id="recPhone" class="form-control">
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <label class="fw-bold">用途說明</label>
+              <textarea id="recPurpose" class="form-control" rows="2" placeholder="例：音樂課"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="saveRecBtn" onclick="saveRecurringReservation()">送出批次預約</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 帳號編輯 Modal -->
   <div class="modal fade" id="userEditModal" tabindex="-1">
     <div class="modal-dialog">
@@ -234,7 +330,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     // ⚠️ 請修改為您的 GAS 部署網址
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxHgPRz7vJkF-IVhJosVkhyzNW3ZzufFkvI0aCewLWJpgqxgDlCv51ytREH2KBCYM90/exec";
+    const GAS_URL = "https://script.google.com/macros/s/你的部署ID/exec";
     
     let currentDate = new Date();
     let reservationsData = [];
@@ -244,7 +340,6 @@
       loadReservations();
     };
 
-    // 1. 載入並渲染月曆預約資料
     function loadReservations() {
       fetch(GAS_URL)
         .then(res => res.json())
@@ -283,7 +378,6 @@
             let dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateCounter).padStart(2, '0')}`;
             cell.innerHTML = `<div class="day-number">${dateCounter}</div>`;
 
-            // 抓取當天預約
             let dayEvents = reservationsData.filter(r => r.date === dateStr);
             dayEvents.forEach(e => {
               let badge = document.createElement('a');
@@ -307,7 +401,6 @@
       renderCalendar();
     }
 
-    // 2. 顯示預約詳細內容 Modal
     function showDetail(item) {
       document.getElementById('detailVenue').innerText = item.venue;
       document.getElementById('detailDate').innerText = item.date;
@@ -318,7 +411,6 @@
       new bootstrap.Modal(document.getElementById('detailModal')).show();
     }
 
-    // 3. 管理者登入與帳號管理
     function login() {
       const u = document.getElementById('loginUser').value;
       const p = document.getElementById('loginPwd').value;
@@ -342,7 +434,6 @@
       document.getElementById('adminPanel').classList.add('d-none');
     }
 
-    // 管理者 - 預約管理 (新增/修改/刪除)
     function renderAdminResTable() {
       const tbody = document.getElementById('adminResTable');
       tbody.innerHTML = '';
@@ -370,6 +461,11 @@
       new bootstrap.Modal(document.getElementById('resEditModal')).show();
     }
 
+    function openRecurringModal() {
+      document.getElementById('recurringForm').reset();
+      new bootstrap.Modal(document.getElementById('recurringModal')).show();
+    }
+
     function editRes(r) {
       document.getElementById('resId').value = r.id;
       document.getElementById('resUsername').value = r.username;
@@ -382,12 +478,32 @@
       new bootstrap.Modal(document.getElementById('resEditModal')).show();
     }
 
+    // 前端即時一年防呆比對
+    function checkIsWithinOneYear(dateString) {
+      const inputDate = new Date(dateString);
+      const today = new Date();
+      const maxDate = new Date();
+      maxDate.setFullYear(today.getFullYear() + 1);
+
+      inputDate.setHours(0,0,0,0);
+      today.setHours(0,0,0,0);
+      maxDate.setHours(23,59,59,999);
+
+      return inputDate <= maxDate;
+    }
+
     function saveReservation() {
+      const dateVal = document.getElementById('resDate').value;
+      if (!checkIsWithinOneYear(dateVal)) {
+        alert("⚠️ 防呆警告：系統僅開放預約一年內的場地！");
+        return;
+      }
+
       const data = {
         id: document.getElementById('resId').value,
         username: document.getElementById('resUsername').value,
         venue: document.getElementById('resVenue').value,
-        date: document.getElementById('resDate').value,
+        date: dateVal,
         slot: document.getElementById('resSlot').value,
         phone: document.getElementById('resPhone').value,
         purpose: document.getElementById('resPurpose').value
@@ -404,6 +520,65 @@
       });
     }
 
+    // 儲存長期/週期預約
+    function saveRecurringReservation() {
+      const startDate = document.getElementById('recStartDate').value;
+      const endDate = document.getElementById('recEndDate').value;
+
+      if (!startDate || !endDate) {
+        alert("請選擇完整的開始與結束日期！");
+        return;
+      }
+
+      // 前端一年防呆判斷
+      if (!checkIsWithinOneYear(startDate) || !checkIsWithinOneYear(endDate)) {
+        alert("⚠️ 防呆警告：系統僅開放預約一年內的場地，結束日期不可超過一年後！");
+        return;
+      }
+
+      const daysOfWeek = [];
+      document.querySelectorAll('.rec-day:checked').forEach(cb => {
+        daysOfWeek.push(cb.value);
+      });
+
+      if (daysOfWeek.length === 0) {
+        alert("請至少勾選一個重複的星期（例如：週三）！");
+        return;
+      }
+
+      const btn = document.getElementById('saveRecBtn');
+      btn.disabled = true;
+      btn.innerText = "資料處理中...";
+
+      const data = {
+        username: document.getElementById('recUsername').value,
+        venue: document.getElementById('recVenue').value,
+        startDate: startDate,
+        endDate: endDate,
+        daysOfWeek: daysOfWeek,
+        slot: document.getElementById('recSlot').value,
+        phone: document.getElementById('recPhone').value,
+        purpose: document.getElementById('recPurpose').value
+      };
+
+      fetch(GAS_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'addRecurringReservations', data: data })
+      }).then(r => r.json()).then(res => {
+        alert(res.message);
+        btn.disabled = false;
+        btn.innerText = "送出批次預約";
+        if (res.status === 'success') {
+          bootstrap.Modal.getInstance(document.getElementById('recurringModal')).hide();
+          loadReservations();
+        }
+      }).catch(err => {
+        alert("發生錯誤：" + err);
+        btn.disabled = false;
+        btn.innerText = "送出批次預約";
+      });
+    }
+
     function deleteRes(id) {
       if(!confirm("確定要刪除這筆預約嗎？")) return;
       fetch(GAS_URL, {
@@ -415,7 +590,6 @@
       });
     }
 
-    // 管理者 - 帳號管理 (新增/修改/刪除)
     function loadUsers() {
       fetch(GAS_URL, {
         method: 'POST',
