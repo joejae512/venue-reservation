@@ -60,6 +60,7 @@
       background-color: white;
     }
 
+    /* 凍結頂端場地列 */
     .matrix-table th {
       position: sticky;
       top: 0;
@@ -130,11 +131,13 @@
 </head>
 <body>
 
+  <!-- 頂部標題列 -->
   <div class="header-title">
     <h2>越港生活圈場地預約瀏覽</h2>
   </div>
 
   <div class="main-container">
+    <!-- 功能頁籤 -->
     <ul class="nav nav-tabs mb-3 flex-shrink-0" id="mainTab" role="tablist">
       <li class="nav-item">
         <button class="nav-link active" id="calendar-tab" data-bs-toggle="tab" data-bs-target="#calendar-view" type="button">📅 場地預約矩陣表</button>
@@ -145,6 +148,7 @@
     </ul>
 
     <div class="tab-content" id="mainTabContent">
+      <!-- 1. 矩陣式預約狀況圖表 -->
       <div class="tab-pane fade show active" id="calendar-view">
         <div class="filter-bar d-flex align-items-center gap-2">
           <span>查詢條件</span>
@@ -167,22 +171,25 @@
         </div>
       </div>
 
+      <!-- 2. 後台管理專區 -->
       <div class="tab-pane fade" id="admin-view">
+        <!-- 登入表單 -->
         <div id="adminLoginForm" class="card mx-auto my-4" style="max-width: 400px;">
           <div class="card-body">
             <h5 class="card-title text-center">系統使用者登入</h5>
             <div class="mb-3">
               <label>帳號</label>
-              <input type="text" id="loginUser" class="form-control" placeholder="請輸入帳號" required>
+              <input type="text" id="loginUser" class="form-control" placeholder="請輸入帳號" maxlength="50" required>
             </div>
             <div class="mb-3">
               <label>密碼</label>
-              <input type="password" id="loginPwd" class="form-control" placeholder="請輸入密碼" required>
+              <input type="password" id="loginPwd" class="form-control" placeholder="請輸入密碼" maxlength="50" required>
             </div>
             <button class="btn btn-primary w-100" id="loginBtn" onclick="login()">登入系統</button>
           </div>
         </div>
 
+        <!-- 管理控制面板 -->
         <div id="adminPanel" class="d-none my-3">
           <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
             <h4 class="mb-0">
@@ -198,6 +205,7 @@
           </ul>
 
           <div class="tab-content">
+            <!-- 預約管理 -->
             <div class="tab-pane fade show active" id="pills-res">
               <div class="mb-3">
                 <button class="btn btn-success me-2" onclick="openResModal()">+ 單次新增預約</button>
@@ -209,6 +217,7 @@
               </table>
             </div>
 
+            <!-- 帳號管理 -->
             <div class="tab-pane fade" id="pills-user">
               <div class="mb-3">
                 <button id="addUserBtn" class="btn btn-success" onclick="openUserModal()">+ 新增帳號</button>
@@ -257,7 +266,7 @@
           </div>
           <form id="resForm">
             <input type="hidden" id="resId">
-            <div class="mb-2"><label>申請人/帳號</label><input type="text" id="resUsername" class="form-control" required></div>
+            <div class="mb-2"><label>申請人/帳號</label><input type="text" id="resUsername" class="form-control" maxlength="50" required></div>
             <div class="mb-2">
               <label>場地</label>
               <select id="resVenue" class="form-select" required>
@@ -278,8 +287,8 @@
                 <option value="下午">下午</option>
               </select>
             </div>
-            <div class="mb-2"><label>聯絡人</label><input type="text" id="resContact" class="form-control" placeholder="請輸入聯絡人姓名"></div>
-            <div class="mb-2"><label>用途說明</label><textarea id="resPurpose" class="form-control" rows="2"></textarea></div>
+            <div class="mb-2"><label>聯絡人</label><input type="text" id="resContact" class="form-control" placeholder="請輸入聯絡人姓名" maxlength="50"></div>
+            <div class="mb-2"><label>用途說明</label><textarea id="resPurpose" class="form-control" rows="2" placeholder="請輸入用途說明（200字以內）" maxlength="200"></textarea></div>
           </form>
         </div>
         <div class="modal-footer"><button type="button" class="btn btn-primary" id="saveResBtn" onclick="saveReservation()">儲存預約</button></div>
@@ -299,7 +308,7 @@
           <div class="alert alert-danger fw-bold mb-3">⚠️ 提示與防呆機制：系統僅開放預約即日起【一年內】的場地！</div>
           <form id="recurringForm">
             <div class="row">
-              <div class="col-md-6 mb-2"><label class="fw-bold">申請人/帳號</label><input type="text" id="recUsername" class="form-control" required></div>
+              <div class="col-md-6 mb-2"><label class="fw-bold">申請人/帳號</label><input type="text" id="recUsername" class="form-control" maxlength="50" required></div>
               <div class="col-md-6 mb-2">
                 <label class="fw-bold">場地</label>
                 <select id="recVenue" class="form-select" required>
@@ -333,9 +342,9 @@
                   <option value="全天">全天</option><option value="上午">上午</option><option value="下午">下午</option>
                 </select>
               </div>
-              <div class="col-md-6 mb-2"><label class="fw-bold">聯絡人</label><input type="text" id="recContact" class="form-control" placeholder="請輸入聯絡人姓名"></div>
+              <div class="col-md-6 mb-2"><label class="fw-bold">聯絡人</label><input type="text" id="recContact" class="form-control" placeholder="請輸入聯絡人姓名" maxlength="50"></div>
             </div>
-            <div class="mb-2"><label class="fw-bold">用途說明</label><textarea id="recPurpose" class="form-control" rows="2" placeholder="例：音樂課"></textarea></div>
+            <div class="mb-2"><label class="fw-bold">用途說明</label><textarea id="recPurpose" class="form-control" rows="2" placeholder="請輸入用途說明（200字以內）" maxlength="200"></textarea></div>
           </form>
         </div>
         <div class="modal-footer"><button type="button" class="btn btn-primary" id="saveRecBtn" onclick="saveRecurringReservation()">送出批次預約</button></div>
@@ -350,8 +359,8 @@
         <div class="modal-header"><h5 class="modal-title" id="userModalTitle">編輯帳號與密碼</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
         <div class="modal-body">
           <form id="userForm">
-            <div class="mb-2"><label>帳號</label><input type="text" id="accUsername" class="form-control" required></div>
-            <div class="mb-2"><label>新密碼</label><input type="password" id="accPassword" class="form-control" placeholder="請輸入新密碼" required></div>
+            <div class="mb-2"><label>帳號</label><input type="text" id="accUsername" class="form-control" maxlength="50" required></div>
+            <div class="mb-2"><label>新密碼</label><input type="password" id="accPassword" class="form-control" placeholder="請輸入新密碼" maxlength="50" required></div>
             <div class="mb-2">
               <label>角色權限</label>
               <select id="accRole" class="form-select">
@@ -368,7 +377,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxHgPRz7vJkF-IVhJosVkhyzNW3ZzufFkvI0aCewLWJpgqxgDlCv51ytREH2KBCYM90/exec"; 
+    // ⚠️ 請填入您的 Apps Script 部署網址
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzL5Nf4jAtM-1b5zC9K6r_3wK5nO/exec"; 
     
     const VENUES = ["智慧中心會議室（20）", "準備教室B（40）", "電腦教室（25）", "視聽教室（90）", "廚房多功教室（40）", "前庭停車場（30）"];
     const WEEK_DAYS = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
@@ -527,7 +537,7 @@
         }
       }).catch(err => {
         loginBtn.disabled = false; loginBtn.innerText = "登入系統";
-        alert("登入發生錯誤");
+        alert("登入連線發生錯誤");
       });
     }
 
@@ -594,8 +604,8 @@
       document.getElementById('resVenue').value = r.venue;
       document.getElementById('resDate').value = r.date;
       document.getElementById('resSlot').value = r.slot;
-      document.getElementById('resContact').value = r.contactPerson;
-      document.getElementById('resPurpose').value = r.purpose;
+      document.getElementById('resContact').value = r.contactPerson || '';
+      document.getElementById('resPurpose').value = r.purpose || '';
       const userInput = document.getElementById('resUsername');
       userInput.readOnly = (currentUser.role !== 'admin');
       document.getElementById('resModalTitle').innerText = "修改預約";
@@ -780,12 +790,11 @@
       new bootstrap.Modal(document.getElementById('userEditModal')).show();
     }
 
-    // 🔒 密碼不顯示/不填寫代表保持原密碼
     function editUser(u) {
       isEditingUser = true;
       document.getElementById('accUsername').value = u.username;
       document.getElementById('accUsername').readOnly = true;
-      document.getElementById('accPassword').value = ''; 
+      document.getElementById('accPassword').value = '';
       document.getElementById('accPassword').placeholder = "若不修改密碼請留空";
       document.getElementById('accRole').value = u.role;
       document.getElementById('accRole').disabled = (currentUser.role !== 'admin');
